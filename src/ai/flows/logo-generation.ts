@@ -15,7 +15,7 @@ import {z} from 'genkit';
 const LogoGenerationInputSchema = z.object({
   brandName: z.string().describe('The name of the brand for which to generate a logo.'),
   colorPalette: z
-    .enum(['vibrant', 'pastel', 'dark mode', 'monochrome'])
+    .enum(['vibrant', 'pastel', 'dark mode', 'monochrome', 'Earthy Tones', 'Oceanic Blues', 'Sunset Hues', 'Forest Greens'])
     .describe('The color palette to use for the logo.'),
   designStyle:
     z.enum(['Minimalist', 'Geometric', 'Abstract', 'Vintage', 'Modern']).describe('The design style of the logo.'),
@@ -56,7 +56,7 @@ const generateLogoFlow = ai.defineFlow(
       model: 'googleai/gemini-2.0-flash-exp',
       prompt: imagePrompt,
       config: {
-        responseModalities: ['TEXT', 'IMAGE'], 
+        responseModalities: ['TEXT', 'IMAGE'],
       },
     });
 
@@ -70,3 +70,5 @@ const generateLogoFlow = ai.defineFlow(
     };
   }
 );
+
+    

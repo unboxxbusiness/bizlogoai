@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -43,7 +44,7 @@ import {
 
 const logoGenerationSchema = z.object({
   brandName: z.string().min(1, { message: 'Brand name is required.' }).max(50, { message: 'Brand name must be 50 characters or less.'}),
-  colorPalette: z.enum(['vibrant', 'pastel', 'dark mode', 'monochrome']),
+  colorPalette: z.enum(['vibrant', 'pastel', 'dark mode', 'monochrome', 'Earthy Tones', 'Oceanic Blues', 'Sunset Hues', 'Forest Greens']),
   designStyle: z.enum(['Minimalist', 'Geometric', 'Abstract', 'Vintage', 'Modern']),
   logoStyle: z.enum(['Icon-based', 'Wordmark', 'Lettermark', 'Emblem']),
 });
@@ -169,6 +170,10 @@ export default function HomePage() {
                             <SelectItem value="pastel">Pastel</SelectItem>
                             <SelectItem value="dark mode">Dark Mode</SelectItem>
                             <SelectItem value="monochrome">Monochrome</SelectItem>
+                            <SelectItem value="Earthy Tones">Earthy Tones</SelectItem>
+                            <SelectItem value="Oceanic Blues">Oceanic Blues</SelectItem>
+                            <SelectItem value="Sunset Hues">Sunset Hues</SelectItem>
+                            <SelectItem value="Forest Greens">Forest Greens</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -193,7 +198,7 @@ export default function HomePage() {
                                 <FormControl>
                                    <RadioGroupItem value={option.value} id={`design-${option.value}`} className="sr-only" />
                                 </FormControl>
-                                <Label 
+                                <Label
                                   htmlFor={`design-${option.value}`}
                                   className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                 >
@@ -210,7 +215,7 @@ export default function HomePage() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="logoStyle"
@@ -228,7 +233,7 @@ export default function HomePage() {
                                 <FormControl>
                                   <RadioGroupItem value={option.value} id={`logo-${option.value}`} className="sr-only" />
                                 </FormControl>
-                                <Label 
+                                <Label
                                   htmlFor={`logo-${option.value}`}
                                   className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                 >
@@ -301,3 +306,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    

@@ -193,37 +193,15 @@ export default function HomePage() {
         const originalHeight = img.naturalHeight;
         const targetWidth = option.width;
         const targetHeight = option.height;
-
-        let newWidth, newHeight, x, y;
-
-        const aspectRatio = originalWidth / originalHeight;
-        const targetAspectRatio = targetWidth / targetHeight;
-
-        if (aspectRatio > targetAspectRatio) { // original is wider than target
-          newHeight = targetHeight;
-          newWidth = newHeight * aspectRatio;
-        } else { // original is taller than target or same aspect ratio
-          newWidth = targetWidth;
-          newHeight = newWidth / aspectRatio;
-        }
-        
-        // If we are scaling up to fit, one dimension will match, other will be larger
-        // If we are scaling down to fit, one dimension will match, other will be smaller
-        // We want to "cover" the target area, then crop.
-        // So, scale such that the *smaller* scaled dimension is at least the target dimension
         
         let drawWidth, drawHeight, drawX, drawY;
 
         if (originalWidth / originalHeight > targetWidth / targetHeight) {
-            // Original aspect ratio is wider than target aspect ratio
-            // Fit to height, then crop width
             drawHeight = targetHeight;
             drawWidth = originalWidth * (targetHeight / originalHeight);
             drawX = (targetWidth - drawWidth) / 2;
             drawY = 0;
         } else {
-            // Original aspect ratio is taller than or equal to target aspect ratio
-            // Fit to width, then crop height
             drawWidth = targetWidth;
             drawHeight = originalHeight * (targetWidth / originalWidth);
             drawX = 0;
@@ -274,12 +252,9 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto px-4 min-h-screen flex flex-col">
-      <header className="flex flex-col sm:flex-row justify-between items-center py-6 mb-8 sm:mb-10">
-        <div className="text-center sm:text-left mb-4 sm:mb-0">
-          <h1 className="text-3xl sm:text-5xl font-headline font-bold text-primary">Bizlogo Ai</h1>
-          <p className="text-md sm:text-xl text-muted-foreground mt-1 sm:mt-2">Create your unique brand identity in seconds.</p>
-        </div>
-        <Button asChild variant="outline" className="w-full sm:w-auto">
+      <header className="flex justify-between items-center py-4 border-b mb-8">
+        <h1 className="text-2xl sm:text-3xl font-headline font-bold text-primary">Bizlogo Ai</h1>
+        <Button asChild variant="outline">
           <a href="https://www.learncodewithrk.in/" target="_blank" rel="noopener noreferrer">
             More Tools
             <ExternalLink className="ml-2 h-4 w-4" />

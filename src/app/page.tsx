@@ -134,7 +134,6 @@ export default function HomePage() {
     if (!logoDataUri) return;
     const link = document.createElement('a');
     link.href = logoDataUri;
-    // Basic check for common image types, default to png
     const fileExtension = logoDataUri.substring(logoDataUri.indexOf('/') + 1, logoDataUri.indexOf(';base64')) || 'png';
     link.download = `${form.getValues('brandName') || 'logo'}.${fileExtension}`;
     document.body.appendChild(link);
@@ -144,16 +143,16 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto py-8 px-4 min-h-screen flex flex-col">
-      <header className="text-center mb-12">
-        <h1 className="text-5xl font-headline font-bold text-primary">Bizlogo Ai</h1>
-        <p className="text-xl text-muted-foreground mt-2">Create your unique brand identity in seconds.</p>
+      <header className="text-center mb-10 sm:mb-12">
+        <h1 className="text-4xl sm:text-5xl font-headline font-bold text-primary">Bizlogo Ai</h1>
+        <p className="text-lg sm:text-xl text-muted-foreground mt-2">Create your unique brand identity in seconds.</p>
       </header>
 
       <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-1 space-y-6">
           <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
             <CardHeader>
-              <CardTitle className="font-headline">Customize Your Logo</CardTitle>
+              <CardTitle className="font-headline text-2xl sm:text-3xl">Customize Your Logo</CardTitle>
               <CardDescription>Fill in the details to generate your unique logo.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -234,7 +233,7 @@ export default function HomePage() {
                           <RadioGroup
                             onValueChange={field.onChange}
                             defaultValue={field.value}
-                            className="grid grid-cols-2 sm:grid-cols-3 gap-4"
+                            className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
                           >
                             {designStyleOptions.map((option) => (
                               <FormItem key={option.value} className="flex items-center space-x-0">
@@ -243,10 +242,10 @@ export default function HomePage() {
                                 </FormControl>
                                 <Label
                                   htmlFor={`design-${option.value}`}
-                                  className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
+                                  className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                 >
                                   <div className="flex flex-col items-center text-center space-y-1">
-                                    {React.cloneElement(option.icon, { className: "w-10 h-10 mb-1 text-primary"})}
+                                    {React.cloneElement(option.icon, { className: "w-8 h-8 sm:w-10 sm:h-10 mb-1 text-primary"})}
                                     <span className="text-xs font-medium">{option.label}</span>
                                   </div>
                                 </Label>
@@ -269,7 +268,7 @@ export default function HomePage() {
                           <RadioGroup
                             onValueChange={field.onChange}
                             defaultValue={field.value}
-                            className="grid grid-cols-2 sm:grid-cols-3 gap-4"
+                            className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
                           >
                             {logoStyleOptions.map((option) => (
                               <FormItem key={option.value} className="flex items-center space-x-0">
@@ -278,10 +277,10 @@ export default function HomePage() {
                                 </FormControl>
                                 <Label
                                   htmlFor={`logo-${option.value}`}
-                                  className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
+                                  className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                 >
                                   <div className="flex flex-col items-center text-center space-y-1">
-                                    {React.cloneElement(option.icon, { className: "w-8 h-8 mb-1 text-primary"})}
+                                    {React.cloneElement(option.icon, { className: "w-7 h-7 sm:w-8 sm:h-8 mb-1 text-primary"})}
                                     <span className="text-xs font-medium">{option.label}</span>
                                   </div>
                                 </Label>
@@ -294,7 +293,7 @@ export default function HomePage() {
                     )}
                   />
 
-                  <Button type="submit" disabled={isLoading} className="w-full text-lg py-6 transition-all duration-300 hover:opacity-90">
+                  <Button type="submit" disabled={isLoading} className="w-full text-base sm:text-lg py-4 sm:py-6 transition-all duration-300 hover:opacity-90">
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -314,36 +313,36 @@ export default function HomePage() {
         <div className="lg:col-span-2 lg:sticky lg:top-8">
           <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
             <CardHeader>
-              <CardTitle className="font-headline">Logo Preview</CardTitle>
+              <CardTitle className="font-headline text-2xl sm:text-3xl">Logo Preview</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center min-h-[300px] sm:min-h-[400px] p-4 bg-muted/30 rounded-md">
+            <CardContent className="flex flex-col items-center justify-center min-h-[250px] sm:min-h-[300px] lg:min-h-[400px] p-4 bg-muted/30 rounded-md">
               {isLoading && (
                 <div className="flex flex-col items-center animate-fade-in">
-                  <Skeleton className="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] rounded-md mb-4" />
-                  <Skeleton className="w-[120px] h-[24px] rounded-md" />
+                  <Skeleton className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[200px] lg:h-[200px] rounded-md mb-4" />
+                  <Skeleton className="w-[100px] h-[20px] sm:w-[120px] sm:h-[24px] rounded-md" />
                 </div>
               )}
               {!isLoading && logoDataUri && (
                 <div className="text-center animate-fade-in">
-                  <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[200px] sm:max-h-[250px] object-contain mb-4 rounded-md shadow-md" />
-                  {watchedBrandName && <p className="text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
-                  <Button onClick={handleDownload} className="mt-6 transition-all duration-300 hover:opacity-90">
+                  <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[180px] sm:max-h-[200px] lg:max-h-[250px] object-contain mb-4 rounded-md shadow-md" />
+                  {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
+                  <Button onClick={handleDownload} className="mt-4 sm:mt-6 transition-all duration-300 hover:opacity-90">
                     Download Logo
                   </Button>
                 </div>
               )}
               {!isLoading && !logoDataUri && (
                 <div className="text-center text-muted-foreground animate-fade-in">
-                  <Palette className="h-16 w-16 mx-auto mb-4 text-primary opacity-70" />
-                  <p className="text-lg">Your generated logo will appear here.</p>
-                  {watchedBrandName && <p className="text-2xl font-headline mt-4 text-foreground">{watchedBrandName}</p>}
+                  <Palette className="h-12 w-12 sm:h-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-primary opacity-70" />
+                  <p className="text-base sm:text-lg">Your generated logo will appear here.</p>
+                  {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-3 sm:mt-4 text-foreground">{watchedBrandName}</p>}
                 </div>
               )}
             </CardContent>
           </Card>
         </div>
       </main>
-      <footer className="text-center py-8 mt-12 border-t">
+      <footer className="text-center py-6 sm:py-8 mt-10 sm:mt-12 border-t">
         <p className="text-sm text-muted-foreground">
           {currentYear !== null ? `© ${currentYear} Bizlogo Ai. All rights reserved.` : 'Loading year...'}
         </p>

@@ -62,11 +62,11 @@ const logoGenerationSchema = z.object({
 type LogoGenerationFormValues = z.infer<typeof logoGenerationSchema>;
 
 const designStyleOptions = [
-  { value: 'Minimalist', label: 'Minimalist', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="minimalist icon" width={40} height={40} alt="Minimalist Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Geometric', label: 'Geometric', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="geometric shape" width={40} height={40} alt="Geometric Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Abstract', label: 'Abstract', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="abstract art" width={40} height={40} alt="Abstract Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Vintage', label: 'Vintage', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="vintage badge" width={40} height={40} alt="Vintage Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Modern', label: 'Modern', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="modern symbol" width={40} height={40} alt="Modern Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Minimalist', label: 'Minimalist', icon: <Image src="https://images.unsplash.com/photo-1604965405469-ecdbe8936495?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWluaW1hbGlzdCUyMGljb258ZW58MHx8fHwxNzQ5Mjc2NTg2fDA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="minimalist icon" width={40} height={40} alt="Minimalist Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Geometric', label: 'Geometric', icon: <Image src="https://images.unsplash.com/photo-1564166307005-efca8b1ec87e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxnZW9tZXRyaWMlMjBzaGFwZXxlbnwwfHx8fDE3NDkyNzY1ODd8MA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="geometric shape" width={40} height={40} alt="Geometric Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Abstract', label: 'Abstract', icon: <Image src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhYnN0cmFjdCUyMGFydHxlbnwwfHx8fDE3NDkyNzY1ODZ8MA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="abstract art" width={40} height={40} alt="Abstract Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Vintage', label: 'Vintage', icon: <Image src="https://images.unsplash.com/photo-1605007236703-7377927e9a4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx2aW50YWdlJTIwYmFkZ2V8ZW58MHx8fHwxNzQ5Mjc2NTg2fDA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="vintage badge" width={40} height={40} alt="Vintage Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Modern', label: 'Modern', icon: <Image src="https://images.unsplash.com/photo-1695106490532-5628ca08bebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9kZXJuJTIwc3ltYm9sfGVufDB8fHx8MTc0OTI3NjU4Nnww&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="modern symbol" width={40} height={40} alt="Modern Design Style Preview" className="mb-2 rounded" /> },
 ] as const;
 
 const logoStyleOptions = [

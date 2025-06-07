@@ -31,7 +31,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile } from 'lucide-react';
+import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -45,6 +45,7 @@ import {
 const logoGenerationSchema = z.object({
   brandName: z.string().min(1, { message: 'Brand name is required.' }).max(50, { message: 'Brand name must be 50 characters or less.'}),
   colorPalette: z.enum(['vibrant', 'pastel', 'dark mode', 'monochrome', 'Earthy Tones', 'Oceanic Blues', 'Sunset Hues', 'Forest Greens']),
+  fontStyle: z.enum(['Serif', 'Sans-serif', 'Script', 'Display', 'Modern', 'Futuristic', 'Elegant', 'Playful']),
   designStyle: z.enum(['Minimalist', 'Geometric', 'Abstract', 'Vintage', 'Modern']),
   logoStyle: z.enum(['Icon-based', 'Wordmark', 'Lettermark', 'Emblem', 'Combination Mark', 'Mascot']),
 });
@@ -68,6 +69,17 @@ const logoStyleOptions = [
   { value: 'Mascot', label: 'Mascot', icon: <Smile className="w-10 h-10 mb-2" /> },
 ] as const;
 
+const fontStyleOptions = [
+  { value: 'Serif', label: 'Serif' },
+  { value: 'Sans-serif', label: 'Sans-serif' },
+  { value: 'Script', label: 'Script' },
+  { value: 'Display', label: 'Display' },
+  { value: 'Modern', label: 'Modern' },
+  { value: 'Futuristic', label: 'Futuristic' },
+  { value: 'Elegant', label: 'Elegant' },
+  { value: 'Playful', label: 'Playful' },
+] as const;
+
 
 export default function HomePage() {
   const { toast } = useToast();
@@ -80,6 +92,7 @@ export default function HomePage() {
     defaultValues: {
       brandName: '',
       colorPalette: 'vibrant',
+      fontStyle: 'Modern',
       designStyle: 'Modern',
       logoStyle: 'Icon-based',
     },
@@ -176,6 +189,29 @@ export default function HomePage() {
                             <SelectItem value="Oceanic Blues">Oceanic Blues</SelectItem>
                             <SelectItem value="Sunset Hues">Sunset Hues</SelectItem>
                             <SelectItem value="Forest Greens">Forest Greens</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="fontStyle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Font Style</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-ring">
+                              <SelectValue placeholder="Select a font style" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {fontStyleOptions.map(option => (
+                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -2,7 +2,7 @@
 'use server';
 
 /**
- * @fileOverview Generates a logo based on the brand name, color palette, design style, and logo style.
+ * @fileOverview Generates a logo based on the brand name, color palette, design style, logo style, and font style.
  *
  * - generateLogo - A function that handles the logo generation process.
  * - LogoGenerationInput - The input type for the generateLogo function.
@@ -21,6 +21,7 @@ const LogoGenerationInputSchema = z.object({
     z.enum(['Minimalist', 'Geometric', 'Abstract', 'Vintage', 'Modern']).describe('The design style of the logo.'),
   logoStyle:
     z.enum(['Icon-based', 'Wordmark', 'Lettermark', 'Emblem', 'Combination Mark', 'Mascot']).describe('The style of the logo.'),
+  fontStyle: z.enum(['Serif', 'Sans-serif', 'Script', 'Display', 'Modern', 'Futuristic', 'Elegant', 'Playful']).describe('The font style to use for the logo text.'),
 });
 
 export type LogoGenerationInput = z.infer<typeof LogoGenerationInputSchema>;
@@ -50,7 +51,9 @@ const generateLogoFlow = ai.defineFlow(
     const imagePrompt = `Generate a logo for the brand "${input.brandName}" with the following characteristics:
 - Color Palette: ${input.colorPalette}
 - Design Style: ${input.designStyle}
-- Logo Style: ${input.logoStyle}`;
+- Logo Style: ${input.logoStyle}
+- Font Style: ${input.fontStyle}
+The logo should be visually appealing and suitable for a business. If the logo style is Wordmark or Lettermark, ensure the brand name is prominent and uses the specified font style. For Icon-based, Emblem, Combination Mark, or Mascot logos, if text is part of the design, it should also reflect the chosen font style.`;
 
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-exp',

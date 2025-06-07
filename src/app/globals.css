@@ -9,33 +9,33 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 94%; /* Light Gray #F0F0F0 */
-    --foreground: 0 0% 3.9%; /* Near Black */
+    --background: 0 0% 90%; /* Light Gray #e5e5e5 */
+    --foreground: 223 55% 16%; /* Dark Blue #14213d */
 
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 0 0% 3.9%;
+    --card: 0 0% 100%; /* White #ffffff */
+    --card-foreground: 223 55% 16%; /* Dark Blue #14213d */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%; /* White #ffffff */
+    --popover-foreground: 223 55% 16%; /* Dark Blue #14213d */
 
-    --primary: 275 100% 25%; /* Strong Indigo #4B0082 */
-    --primary-foreground: 0 0% 98%; /* Light color for text on primary */
+    --primary: 39 98% 52%; /* Vibrant Yellow/Orange #fca311 */
+    --primary-foreground: 0 0% 0%; /* Black #000000 for text on primary */
 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 0 0% 93%; /* Slightly darker than #e5e5e5 background */
+    --secondary-foreground: 223 55% 20%; /* Dark Blue, slightly lighter variant */
 
-    --muted: 0 0% 90%; /* Adjusted for better contrast on light gray */
-    --muted-foreground: 0 0% 45.1%;
+    --muted: 0 0% 95%; /* Very light gray, almost white */
+    --muted-foreground: 223 50% 45%; /* Muted blue-gray */
 
-    --accent: 300 26% 71%; /* Lilac #C8A2C8 */
-    --accent-foreground: 275 100% 15%; /* Darker Indigo for text on accent */
+    --accent: 223 55% 25%; /* A brighter/accent version of dark blue #14213d */
+    --accent-foreground: 0 0% 98%; /* Near White for text on accent */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 85%; /* Adjusted for light gray background */
-    --input: 0 0% 89.8%;
-    --ring: 275 100% 50%; /* Brighter Indigo for rings */
+    --border: 0 0% 85%; /* Visible border on light gray */
+    --input: 0 0% 88%; /* Input field border/bg */
+    --ring: 39 98% 52%; /* Vibrant Yellow/Orange #fca311 for rings */
 
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -44,44 +44,45 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar - Light Theme */
+    --sidebar-background: 0 0% 98%; /* White or very light gray */
+    --sidebar-foreground: 223 55% 16%; /* Dark Blue for text */
+    --sidebar-primary: 39 98% 52%; /* Vibrant Yellow/Orange */
+    --sidebar-primary-foreground: 0 0% 0%; /* Black */
+    --sidebar-accent: 0 0% 92%; /* Light gray for hover/active states */
+    --sidebar-accent-foreground: 223 55% 16%; /* Dark Blue */
+    --sidebar-border: 0 0% 85%;
+    --sidebar-ring: 39 98% 52%;
   }
 
   .dark {
-    --background: 0 0% 10%; /* Dark Gray for dark mode */
-    --foreground: 0 0% 95%; /* Light Gray for text */
+    --background: 223 55% 10%; /* Very Dark Blue, darker than #14213d */
+    --foreground: 0 0% 90%; /* Light Gray #e5e5e5 */
 
-    --card: 0 0% 15%; /* Slightly lighter dark gray for cards */
-    --card-foreground: 0 0% 95%;
+    --card: 223 55% 16%; /* Dark Blue #14213d */
+    --card-foreground: 0 0% 90%; /* Light Gray #e5e5e5 */
 
-    --popover: 0 0% 15%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 223 55% 16%; /* Dark Blue #14213d */
+    --popover-foreground: 0 0% 90%; /* Light Gray #e5e5e5 */
 
-    --primary: 275 100% 55%; /* Lighter Indigo for dark mode */
-    --primary-foreground: 0 0% 98%;
+    --primary: 39 98% 52%; /* Vibrant Yellow/Orange #fca311 */
+    --primary-foreground: 0 0% 0%; /* Black for text on primary */
 
-    --secondary: 0 0% 20%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 223 50% 22%; /* Slightly lighter/less saturated blue */
+    --secondary-foreground: 0 0% 95%; /* Off-white */
 
-    --muted: 0 0% 25%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 223 50% 25%; /* Muted, slightly lighter blue */
+    --muted-foreground: 0 0% 70%; /* Medium gray for muted text */
 
-    --accent: 300 30% 80%; /* Brighter Lilac for dark mode */
-    --accent-foreground: 275 100% 10%;
+    --accent: 39 98% 60%; /* Brighter/lighter yellow for accent */
+    --accent-foreground: 0 0% 0%; /* Black for text on accent */
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 275 100% 65%; /* Brighter Indigo ring for dark mode */
+    --border: 223 50% 30%; /* Visible border on dark blue card */
+    --input: 223 50% 30%; /* Input field border/bg */
+    --ring: 39 98% 52%; /* Vibrant Yellow/Orange #fca311 for rings */
     
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -89,14 +90,15 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar - Dark Theme */
+    --sidebar-background: 223 55% 12%; /* Dark Blue, slightly lighter than main bg */
+    --sidebar-foreground: 0 0% 90%; /* Light Gray */
+    --sidebar-primary: 39 98% 52%; /* Vibrant Yellow/Orange */
+    --sidebar-primary-foreground: 0 0% 0%; /* Black */
+    --sidebar-accent: 223 55% 20%; /* Darker blue for hover/active */
+    --sidebar-accent-foreground: 0 0% 95%; /* Off-white */
+    --sidebar-border: 223 50% 30%;
+    --sidebar-ring: 39 98% 52%;
   }
 }
 

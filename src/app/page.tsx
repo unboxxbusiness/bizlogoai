@@ -1,7 +1,7 @@
 
 "use client";
 
-import Image from 'next/image';
+import NextImage from 'next/image'; // Renamed to avoid conflict with lucide-react's Image
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
@@ -31,7 +31,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Type, CaseUpper, ShieldCheck, Combine, Smile, Download, Settings2, ChevronDown, ExternalLink, Sun, Moon, Minimize2, Shapes, Brush, Landmark, Rocket } from 'lucide-react';
+import { Loader2, Palette, Type, CaseUpper, ShieldCheck, Combine, Smile, Download, Settings2, ChevronDown, ExternalLink, Sun, Moon, Minimize2, Shapes, Brush, Landmark, Rocket, Image as ImageIcon } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -70,12 +70,12 @@ const designStyleOptions = [
 ] as const;
 
 const logoStyleOptions = [
-  { value: 'Icon-based', label: 'Icon-based', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="icon logo" width={40} height={40} alt="Icon-based style" className="mb-2 rounded" /> },
-  { value: 'Wordmark', label: 'Wordmark', icon: <Type className="w-10 h-10 mb-2" /> },
-  { value: 'Lettermark', label: 'Lettermark', icon: <CaseUpper className="w-10 h-10 mb-2" /> },
-  { value: 'Emblem', label: 'Emblem', icon: <ShieldCheck className="w-10 h-10 mb-2" /> },
-  { value: 'Combination Mark', label: 'Combination', icon: <Combine className="w-10 h-10 mb-2" /> },
-  { value: 'Mascot', label: 'Mascot', icon: <Smile className="w-10 h-10 mb-2" /> },
+  { value: 'Icon-based', label: 'Icon-based', icon: <ImageIcon /> },
+  { value: 'Wordmark', label: 'Wordmark', icon: <Type /> },
+  { value: 'Lettermark', label: 'Lettermark', icon: <CaseUpper /> },
+  { value: 'Emblem', label: 'Emblem', icon: <ShieldCheck /> },
+  { value: 'Combination Mark', label: 'Combination', icon: <Combine /> },
+  { value: 'Mascot', label: 'Mascot', icon: <Smile /> },
 ] as const;
 
 const fontStyleOptions = [
@@ -297,7 +297,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 flex-grow flex flex-col pt-16 sm:pt-20"> {/* Adjusted pt for fixed header */}
+      <div className="container mx-auto px-4 flex-grow flex flex-col pt-16 sm:pt-20">
         <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-1 space-y-6">
             <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -395,7 +395,7 @@ export default function HomePage() {
                                     className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                   >
                                     <div className="flex flex-col items-center text-center space-y-1">
-                                      {React.isValidElement(option.icon) && !(option.icon.type === Image) ? React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"}) : option.icon}
+                                      {React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
                                       <span className="text-xs font-medium">{option.label}</span>
                                     </div>
                                   </Label>
@@ -430,7 +430,7 @@ export default function HomePage() {
                                     className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                   >
                                     <div className="flex flex-col items-center text-center space-y-1">
-                                      {React.isValidElement(option.icon) && !(option.icon.type === Image) ? React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"}) : option.icon}
+                                    {React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
                                       <span className="text-xs font-medium">{option.label}</span>
                                     </div>
                                   </Label>
@@ -460,7 +460,7 @@ export default function HomePage() {
             </Card>
           </div>
 
-          <div className="lg:col-span-2 lg:sticky lg:top-20"> {/* Adjusted lg:top-X to account for fixed header height */}
+          <div className="lg:col-span-2 lg:sticky lg:top-20">
             <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
               <CardHeader>
                 <CardTitle className="font-headline text-2xl sm:text-3xl">Logo Preview</CardTitle>
@@ -474,7 +474,7 @@ export default function HomePage() {
                 )}
                 {!isLoading && logoDataUri && (
                   <div className="text-center animate-fade-in">
-                    <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
+                    <NextImage src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
                     {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
                       <Button onClick={handleDownload} className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing}>

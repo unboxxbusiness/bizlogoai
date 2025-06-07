@@ -31,7 +31,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket } from 'lucide-react';
+import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -46,7 +46,7 @@ const logoGenerationSchema = z.object({
   brandName: z.string().min(1, { message: 'Brand name is required.' }).max(50, { message: 'Brand name must be 50 characters or less.'}),
   colorPalette: z.enum(['vibrant', 'pastel', 'dark mode', 'monochrome', 'Earthy Tones', 'Oceanic Blues', 'Sunset Hues', 'Forest Greens']),
   designStyle: z.enum(['Minimalist', 'Geometric', 'Abstract', 'Vintage', 'Modern']),
-  logoStyle: z.enum(['Icon-based', 'Wordmark', 'Lettermark', 'Emblem']),
+  logoStyle: z.enum(['Icon-based', 'Wordmark', 'Lettermark', 'Emblem', 'Combination Mark', 'Mascot']),
 });
 
 type LogoGenerationFormValues = z.infer<typeof logoGenerationSchema>;
@@ -64,6 +64,8 @@ const logoStyleOptions = [
   { value: 'Wordmark', label: 'Wordmark', icon: <Type className="w-10 h-10 mb-2" /> },
   { value: 'Lettermark', label: 'Lettermark', icon: <CaseUpper className="w-10 h-10 mb-2" /> },
   { value: 'Emblem', label: 'Emblem', icon: <ShieldCheck className="w-10 h-10 mb-2" /> },
+  { value: 'Combination Mark', label: 'Combination', icon: <Combine className="w-10 h-10 mb-2" /> },
+  { value: 'Mascot', label: 'Mascot', icon: <Smile className="w-10 h-10 mb-2" /> },
 ] as const;
 
 
@@ -226,7 +228,7 @@ export default function HomePage() {
                           <RadioGroup
                             onValueChange={field.onChange}
                             defaultValue={field.value}
-                            className="grid grid-cols-2 sm:grid-cols-2 gap-4"
+                            className="grid grid-cols-2 sm:grid-cols-3 gap-4"
                           >
                             {logoStyleOptions.map((option) => (
                               <FormItem key={option.value} className="flex items-center space-x-0">

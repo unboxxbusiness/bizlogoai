@@ -20,7 +20,7 @@ const LogoGenerationInputSchema = z.object({
   designStyle:
     z.enum(['Minimalist', 'Geometric', 'Abstract', 'Vintage', 'Modern']).describe('The design style of the logo.'),
   logoStyle:
-    z.enum(['Icon-based', 'Wordmark', 'Lettermark', 'Emblem']).describe('The style of the logo.'),
+    z.enum(['Icon-based', 'Wordmark', 'Lettermark', 'Emblem', 'Combination Mark', 'Mascot']).describe('The style of the logo.'),
 });
 
 export type LogoGenerationInput = z.infer<typeof LogoGenerationInputSchema>;
@@ -70,5 +70,3 @@ const generateLogoFlow = ai.defineFlow(
     };
   }
 );
-
-    

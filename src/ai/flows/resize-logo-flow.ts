@@ -73,3 +73,4 @@ Output the resized image as a ${input.targetFormat} file.`;
     };
   }
 );
+

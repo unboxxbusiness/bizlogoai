@@ -196,16 +196,23 @@ export default function HomePage() {
         
         let drawWidth, drawHeight, drawX, drawY;
 
-        if (originalWidth / originalHeight > targetWidth / targetHeight) {
+        // Calculate aspect ratios
+        const originalAspectRatio = originalWidth / originalHeight;
+        const targetAspectRatio = targetWidth / targetHeight;
+
+        // Determine how to fit the image
+        if (originalAspectRatio > targetAspectRatio) {
+            // Original image is wider than target
             drawHeight = targetHeight;
             drawWidth = originalWidth * (targetHeight / originalHeight);
-            drawX = (targetWidth - drawWidth) / 2;
+            drawX = (targetWidth - drawWidth) / 2; // Center horizontally
             drawY = 0;
         } else {
+            // Original image is taller than or same aspect ratio as target
             drawWidth = targetWidth;
             drawHeight = originalHeight * (targetWidth / originalWidth);
             drawX = 0;
-            drawY = (targetHeight - drawHeight) / 2;
+            drawY = (targetHeight - drawHeight) / 2; // Center vertically
         }
         
         ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
@@ -251,243 +258,248 @@ export default function HomePage() {
 
 
   return (
-    <div className="container mx-auto px-4 min-h-screen flex flex-col">
-      <header className="flex justify-between items-center py-4 border-b mb-8">
-        <h1 className="text-2xl sm:text-3xl font-headline font-bold text-primary">Bizlogo Ai</h1>
-        <Button asChild variant="outline">
-          <a href="https://www.learncodewithrk.in/" target="_blank" rel="noopener noreferrer">
-            More Tools
-            <ExternalLink className="ml-2 h-4 w-4" />
-          </a>
-        </Button>
-      </header>
-
-      <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <div className="lg:col-span-1 space-y-6">
-          <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl sm:text-3xl">Customize Your Logo</CardTitle>
-              <CardDescription>Fill in the details to generate your unique logo.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="brandName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Brand Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter your brand name" {...field} className="transition-all duration-300 focus:ring-2 focus:ring-ring" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="colorPalette"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Color Palette</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-ring">
-                              <SelectValue placeholder="Select a color palette" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="vibrant">Vibrant</SelectItem>
-                            <SelectItem value="pastel">Pastel</SelectItem>
-                            <SelectItem value="dark mode">Dark Mode</SelectItem>
-                            <SelectItem value="monochrome">Monochrome</SelectItem>
-                            <SelectItem value="Earthy Tones">Earthy Tones</SelectItem>
-                            <SelectItem value="Oceanic Blues">Oceanic Blues</SelectItem>
-                            <SelectItem value="Sunset Hues">Sunset Hues</SelectItem>
-                            <SelectItem value="Forest Greens">Forest Greens</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="fontStyle"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Font Style</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-ring">
-                              <SelectValue placeholder="Select a font style" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {fontStyleOptions.map(option => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="designStyle"
-                    render={({ field }) => (
-                      <FormItem className="space-y-3">
-                        <FormLabel>Design Style</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
-                          >
-                            {designStyleOptions.map((option) => (
-                              <FormItem key={option.value} className="flex items-center space-x-0">
-                                <FormControl>
-                                   <RadioGroupItem value={option.value} id={`design-${option.value}`} className="sr-only" />
-                                </FormControl>
-                                <Label
-                                  htmlFor={`design-${option.value}`}
-                                  className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
-                                >
-                                  <div className="flex flex-col items-center text-center space-y-1">
-                                    {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
-                                    <span className="text-xs font-medium">{option.label}</span>
-                                  </div>
-                                </Label>
-                              </FormItem>
-                            ))}
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="logoStyle"
-                    render={({ field }) => (
-                      <FormItem className="space-y-3">
-                        <FormLabel>Logo Style</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
-                          >
-                            {logoStyleOptions.map((option) => (
-                              <FormItem key={option.value} className="flex items-center space-x-0">
-                                <FormControl>
-                                  <RadioGroupItem value={option.value} id={`logo-${option.value}`} className="sr-only" />
-                                </FormControl>
-                                <Label
-                                  htmlFor={`logo-${option.value}`}
-                                  className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
-                                >
-                                  <div className="flex flex-col items-center text-center space-y-1">
-                                    {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
-                                    <span className="text-xs font-medium">{option.label}</span>
-                                  </div>
-                                </Label>
-                              </FormItem>
-                            ))}
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button type="submit" disabled={isLoading || isResizing} className="w-full text-base sm:text-lg py-3 sm:py-4 transition-all duration-300 hover:opacity-90">
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      'Generate Logo'
-                    )}
-                  </Button>
-                  {formError && <p className="text-sm font-medium text-destructive">{formError}</p>}
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
+    <div className="min-h-screen flex flex-col bg-background">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background border-b shadow-sm">
+        <div className="container mx-auto px-4">
+          <header className="flex justify-between items-center py-3">
+            <h1 className="text-xl sm:text-2xl font-headline font-bold text-primary">Bizlogo Ai</h1>
+            <Button asChild variant="outline" size="sm">
+              <a href="https://www.learncodewithrk.in/" target="_blank" rel="noopener noreferrer">
+                More Tools
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </header>
         </div>
+      </div>
 
-        <div className="lg:col-span-2 lg:sticky lg:top-8">
-          <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl sm:text-3xl">Logo Preview</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center min-h-[200px] sm:min-h-[250px] lg:min-h-[350px] p-4 bg-muted/30 rounded-md">
-              {isLoading && (
-                <div className="flex flex-col items-center animate-fade-in">
-                  <Skeleton className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] lg:w-[150px] lg:h-[150px] rounded-md mb-4" />
-                  <Skeleton className="w-[80px] h-[20px] sm:w-[100px] sm:h-[24px] rounded-md" />
-                </div>
-              )}
-              {!isLoading && logoDataUri && (
-                <div className="text-center animate-fade-in">
-                  <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
-                  {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
-                  <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
-                    <Button onClick={handleDownload} className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing}>
-                      <Download className="mr-2 h-4 w-4" /> Download Original
+      <div className="container mx-auto px-4 flex-grow flex flex-col pt-16 sm:pt-20">
+        <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          <div className="lg:col-span-1 space-y-6">
+            <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
+              <CardHeader>
+                <CardTitle className="font-headline text-2xl sm:text-3xl">Customize Your Logo</CardTitle>
+                <CardDescription>Fill in the details to generate your unique logo.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="brandName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Brand Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your brand name" {...field} className="transition-all duration-300 focus:ring-2 focus:ring-ring" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="colorPalette"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Color Palette</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-ring">
+                                <SelectValue placeholder="Select a color palette" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="vibrant">Vibrant</SelectItem>
+                              <SelectItem value="pastel">Pastel</SelectItem>
+                              <SelectItem value="dark mode">Dark Mode</SelectItem>
+                              <SelectItem value="monochrome">Monochrome</SelectItem>
+                              <SelectItem value="Earthy Tones">Earthy Tones</SelectItem>
+                              <SelectItem value="Oceanic Blues">Oceanic Blues</SelectItem>
+                              <SelectItem value="Sunset Hues">Sunset Hues</SelectItem>
+                              <SelectItem value="Forest Greens">Forest Greens</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="fontStyle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Font Style</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="transition-all duration-300 focus:ring-2 focus:ring-ring">
+                                <SelectValue placeholder="Select a font style" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {fontStyleOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="designStyle"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel>Design Style</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
+                            >
+                              {designStyleOptions.map((option) => (
+                                <FormItem key={option.value} className="flex items-center space-x-0">
+                                  <FormControl>
+                                    <RadioGroupItem value={option.value} id={`design-${option.value}`} className="sr-only" />
+                                  </FormControl>
+                                  <Label
+                                    htmlFor={`design-${option.value}`}
+                                    className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
+                                  >
+                                    <div className="flex flex-col items-center text-center space-y-1">
+                                      {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
+                                      <span className="text-xs font-medium">{option.label}</span>
+                                    </div>
+                                  </Label>
+                                </FormItem>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="logoStyle"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel>Logo Style</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
+                            >
+                              {logoStyleOptions.map((option) => (
+                                <FormItem key={option.value} className="flex items-center space-x-0">
+                                  <FormControl>
+                                    <RadioGroupItem value={option.value} id={`logo-${option.value}`} className="sr-only" />
+                                  </FormControl>
+                                  <Label
+                                    htmlFor={`logo-${option.value}`}
+                                    className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
+                                  >
+                                    <div className="flex flex-col items-center text-center space-y-1">
+                                      {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
+                                      <span className="text-xs font-medium">{option.label}</span>
+                                    </div>
+                                  </Label>
+                                </FormItem>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <Button type="submit" disabled={isLoading || isResizing} className="w-full text-base sm:text-lg py-3 sm:py-4 transition-all duration-300 hover:opacity-90">
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        'Generate Logo'
+                      )}
                     </Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing || !logoDataUri}>
-                          {isResizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Settings2 className="mr-2 h-4 w-4" />}
-                          Resize Logo
-                          <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-56">
-                        <DropdownMenuLabel>Select Size to Download</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {resizeOptions.map((option) => (
-                          <DropdownMenuItem key={option.name} onClick={() => handleResizeAndDownload(option)} disabled={isResizing}>
-                            {option.label}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                    {formError && <p className="text-sm font-medium text-destructive">{formError}</p>}
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          </div>
 
-                </div>
-              )}
-              {!isLoading && !logoDataUri && (
-                <div className="text-center text-muted-foreground animate-fade-in">
-                  <Palette className="h-10 w-10 sm:h-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-primary opacity-70" />
-                  <p className="text-base sm:text-lg">Your generated logo will appear here.</p>
-                  {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-3 sm:mt-4 text-foreground">{watchedBrandName}</p>}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-      <footer className="text-center py-4 sm:py-6 mt-10 sm:mt-12 border-t">
-        <p className="text-xs sm:text-sm text-muted-foreground">
-          {currentYear !== null ? `© ${currentYear} Bizlogo Ai. All rights reserved.` : 'Loading year...'}
-        </p>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-          <a href="https://www.learncodewithrk.in" target="_blank" rel="noopener noreferrer" className="hover:text-primary underline">
-            www.learncodewithrk.in
-          </a>
-        </p>
-      </footer>
+          <div className="lg:col-span-2 lg:sticky lg:top-8">
+            <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
+              <CardHeader>
+                <CardTitle className="font-headline text-2xl sm:text-3xl">Logo Preview</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col items-center justify-center min-h-[200px] sm:min-h-[250px] lg:min-h-[350px] p-4 bg-muted/30 rounded-md">
+                {isLoading && (
+                  <div className="flex flex-col items-center animate-fade-in">
+                    <Skeleton className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] lg:w-[150px] lg:h-[150px] rounded-md mb-4" />
+                    <Skeleton className="w-[80px] h-[20px] sm:w-[100px] sm:h-[24px] rounded-md" />
+                  </div>
+                )}
+                {!isLoading && logoDataUri && (
+                  <div className="text-center animate-fade-in">
+                    <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
+                    {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
+                      <Button onClick={handleDownload} className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing}>
+                        <Download className="mr-2 h-4 w-4" /> Download Original
+                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing || !logoDataUri}>
+                            {isResizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Settings2 className="mr-2 h-4 w-4" />}
+                            Resize Logo
+                            <ChevronDown className="ml-2 h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-56">
+                          <DropdownMenuLabel>Select Size to Download</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {resizeOptions.map((option) => (
+                            <DropdownMenuItem key={option.name} onClick={() => handleResizeAndDownload(option)} disabled={isResizing}>
+                              {option.label}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+
+                  </div>
+                )}
+                {!isLoading && !logoDataUri && (
+                  <div className="text-center text-muted-foreground animate-fade-in">
+                    <Palette className="h-10 w-10 sm:h-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-primary opacity-70" />
+                    <p className="text-base sm:text-lg">Your generated logo will appear here.</p>
+                    {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-3 sm:mt-4 text-foreground">{watchedBrandName}</p>}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+        <footer className="text-center py-4 sm:py-6 mt-10 sm:mt-12 border-t">
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            {currentYear !== null ? `© ${currentYear} Bizlogo Ai. All rights reserved.` : 'Loading year...'}
+          </p>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            <a href="https://www.learncodewithrk.in" target="_blank" rel="noopener noreferrer" className="hover:text-primary underline">
+              www.learncodewithrk.in
+            </a>
+          </p>
+        </footer>
+      </div>
     </div>
   );
 }
-

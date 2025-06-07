@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -28,7 +29,7 @@ const LogoGenerationOutputSchema = z.object({
   logoDataUri: z
     .string()
     .describe(
-      'The generated logo as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.' /* example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w+b///9nZ0YABksMA4jYAD8zVvE5MzYwAAAAASUVORK5CYII= */
+      'The generated logo as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
     ),
   prompt: z.string().describe('The prompt that was used to generate the logo.'),
 });
@@ -39,44 +40,33 @@ export async function generateLogo(input: LogoGenerationInput): Promise<LogoGene
   return generateLogoFlow(input);
 }
 
-const generateLogoPrompt = ai.definePrompt({
-  name: 'generateLogoPrompt',
-  input: {schema: LogoGenerationInputSchema},
-  output: {schema: LogoGenerationOutputSchema},
-  prompt: `You are an expert logo designer. Generate a logo for the brand "{{{brandName}}}" with the following characteristics:
-
-  - Color Palette: {{{colorPalette}}}
-  - Design Style: {{{designStyle}}}
-  - Logo Style: {{{logoStyle}}}
-
-  Return the logo as a data URI in the logoDataUri field. Also return the prompt you used to generate the logo in the prompt field.`,
-});
-
 const generateLogoFlow = ai.defineFlow(
   {
     name: 'generateLogoFlow',
     inputSchema: LogoGenerationInputSchema,
     outputSchema: LogoGenerationOutputSchema,
   },
-  async input => {
-    //const {text, media} = await ai.generate({
-    //model: 'googleai/gemini-2.0-flash-exp',
-    //prompt: `Generate a logo for the brand "${input.brandName}" with the following characteristics:
-    //
-    //- Color Palette: ${input.colorPalette}
-    //- Design Style: ${input.designStyle}
-    //- Logo Style: ${input.logoStyle}`,
-    //config: {
-    //responseModalities: ['TEXT', 'IMAGE'], // MUST provide both TEXT and IMAGE, IMAGE only won't work
-    //},
-    //});
+  async (input: LogoGenerationInput) => {
+    const imagePrompt = `Generate a logo for the brand "${input.brandName}" with the following characteristics:
+- Color Palette: ${input.colorPalette}
+- Design Style: ${input.designStyle}
+- Logo Style: ${input.logoStyle}`;
 
-    //return {
-    //logoDataUri: media.url,
-    //};
+    const {media} = await ai.generate({
+      model: 'googleai/gemini-2.0-flash-exp',
+      prompt: imagePrompt,
+      config: {
+        responseModalities: ['TEXT', 'IMAGE'], 
+      },
+    });
 
-    const {output} = await generateLogoPrompt(input);
+    if (!media?.url) {
+      throw new Error('Image generation failed to return a media URL.');
+    }
 
-    return output!;
+    return {
+      logoDataUri: media.url,
+      prompt: imagePrompt,
+    };
   }
 );

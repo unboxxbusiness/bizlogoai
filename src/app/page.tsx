@@ -144,8 +144,8 @@ export default function HomePage() {
   return (
     <div className="container mx-auto py-8 px-4 min-h-screen flex flex-col">
       <header className="text-center mb-10 sm:mb-12">
-        <h1 className="text-4xl sm:text-5xl font-headline font-bold text-primary">Bizlogo Ai</h1>
-        <p className="text-lg sm:text-xl text-muted-foreground mt-2">Create your unique brand identity in seconds.</p>
+        <h1 className="text-3xl sm:text-5xl font-headline font-bold text-primary">Bizlogo Ai</h1>
+        <p className="text-md sm:text-xl text-muted-foreground mt-2">Create your unique brand identity in seconds.</p>
       </header>
 
       <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -245,7 +245,7 @@ export default function HomePage() {
                                   className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                 >
                                   <div className="flex flex-col items-center text-center space-y-1">
-                                    {React.cloneElement(option.icon, { className: "w-8 h-8 sm:w-10 sm:h-10 mb-1 text-primary"})}
+                                    {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
                                     <span className="text-xs font-medium">{option.label}</span>
                                   </div>
                                 </Label>
@@ -280,7 +280,7 @@ export default function HomePage() {
                                   className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                 >
                                   <div className="flex flex-col items-center text-center space-y-1">
-                                    {React.cloneElement(option.icon, { className: "w-7 h-7 sm:w-8 sm:h-8 mb-1 text-primary"})}
+                                    {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
                                     <span className="text-xs font-medium">{option.label}</span>
                                   </div>
                                 </Label>
@@ -293,7 +293,7 @@ export default function HomePage() {
                     )}
                   />
 
-                  <Button type="submit" disabled={isLoading} className="w-full text-base sm:text-lg py-4 sm:py-6 transition-all duration-300 hover:opacity-90">
+                  <Button type="submit" disabled={isLoading} className="w-full text-base sm:text-lg py-3 sm:py-4 transition-all duration-300 hover:opacity-90">
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -315,16 +315,16 @@ export default function HomePage() {
             <CardHeader>
               <CardTitle className="font-headline text-2xl sm:text-3xl">Logo Preview</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center min-h-[250px] sm:min-h-[300px] lg:min-h-[400px] p-4 bg-muted/30 rounded-md">
+            <CardContent className="flex flex-col items-center justify-center min-h-[200px] sm:min-h-[250px] lg:min-h-[350px] p-4 bg-muted/30 rounded-md">
               {isLoading && (
                 <div className="flex flex-col items-center animate-fade-in">
-                  <Skeleton className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[200px] lg:h-[200px] rounded-md mb-4" />
-                  <Skeleton className="w-[100px] h-[20px] sm:w-[120px] sm:h-[24px] rounded-md" />
+                  <Skeleton className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] lg:w-[150px] lg:h-[150px] rounded-md mb-4" />
+                  <Skeleton className="w-[80px] h-[20px] sm:w-[100px] sm:h-[24px] rounded-md" />
                 </div>
               )}
               {!isLoading && logoDataUri && (
                 <div className="text-center animate-fade-in">
-                  <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[180px] sm:max-h-[200px] lg:max-h-[250px] object-contain mb-4 rounded-md shadow-md" />
+                  <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
                   {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
                   <Button onClick={handleDownload} className="mt-4 sm:mt-6 transition-all duration-300 hover:opacity-90">
                     Download Logo
@@ -333,7 +333,7 @@ export default function HomePage() {
               )}
               {!isLoading && !logoDataUri && (
                 <div className="text-center text-muted-foreground animate-fade-in">
-                  <Palette className="h-12 w-12 sm:h-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-primary opacity-70" />
+                  <Palette className="h-10 w-10 sm:h-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-primary opacity-70" />
                   <p className="text-base sm:text-lg">Your generated logo will appear here.</p>
                   {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-3 sm:mt-4 text-foreground">{watchedBrandName}</p>}
                 </div>
@@ -342,9 +342,14 @@ export default function HomePage() {
           </Card>
         </div>
       </main>
-      <footer className="text-center py-6 sm:py-8 mt-10 sm:mt-12 border-t">
-        <p className="text-sm text-muted-foreground">
+      <footer className="text-center py-4 sm:py-6 mt-10 sm:mt-12 border-t">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           {currentYear !== null ? `© ${currentYear} Bizlogo Ai. All rights reserved.` : 'Loading year...'}
+        </p>
+        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+          <a href="https://www.learncodewithrk.in" target="_blank" rel="noopener noreferrer" className="hover:text-primary underline">
+            www.learncodewithrk.in
+          </a>
         </p>
       </footer>
     </div>

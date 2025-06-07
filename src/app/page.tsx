@@ -31,7 +31,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline, Download, Settings2, ChevronDown, ExternalLink } from 'lucide-react';
+import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline, Download, Settings2, ChevronDown, ExternalLink, Sun, Moon } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -106,10 +106,33 @@ export default function HomePage() {
   const [isResizing, setIsResizing] = React.useState(false);
   const [formError, setFormError] = React.useState<string | null>(null);
   const [currentYear, setCurrentYear] = React.useState<number | null>(null);
+  const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
 
   React.useEffect(() => {
     setCurrentYear(new Date().getFullYear());
+
+    const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (storedTheme) {
+      setTheme(storedTheme);
+    } else {
+      setTheme(prefersDark ? 'dark' : 'light');
+    }
   }, []);
+
+  React.useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
 
   const form = useForm<LogoGenerationFormValues>({
     resolver: zodResolver(logoGenerationSchema),
@@ -196,23 +219,19 @@ export default function HomePage() {
         
         let drawWidth, drawHeight, drawX, drawY;
 
-        // Calculate aspect ratios
         const originalAspectRatio = originalWidth / originalHeight;
         const targetAspectRatio = targetWidth / targetHeight;
 
-        // Determine how to fit the image
         if (originalAspectRatio > targetAspectRatio) {
-            // Original image is wider than target
             drawHeight = targetHeight;
             drawWidth = originalWidth * (targetHeight / originalHeight);
-            drawX = (targetWidth - drawWidth) / 2; // Center horizontally
+            drawX = (targetWidth - drawWidth) / 2; 
             drawY = 0;
         } else {
-            // Original image is taller than or same aspect ratio as target
             drawWidth = targetWidth;
             drawHeight = originalHeight * (targetWidth / originalWidth);
             drawX = 0;
-            drawY = (targetHeight - drawHeight) / 2; // Center vertically
+            drawY = (targetHeight - drawHeight) / 2;
         }
         
         ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
@@ -263,17 +282,22 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <header className="flex justify-between items-center py-3">
             <h1 className="text-xl sm:text-2xl font-headline font-bold text-primary">Bizlogo Ai</h1>
-            <Button asChild variant="outline" size="sm">
-              <a href="https://www.learncodewithrk.in/" target="_blank" rel="noopener noreferrer">
-                More Tools
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
+            <div className="flex items-center">
+              <Button variant="outline" size="icon" onClick={toggleTheme} className="mr-2" aria-label="Toggle theme">
+                {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <a href="https://www.learncodewithrk.in/" target="_blank" rel="noopener noreferrer">
+                  More Tools
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </div>
           </header>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 flex-grow flex flex-col pt-16 sm:pt-20">
+      <div className="container mx-auto px-4 flex-grow flex flex-col pt-16 sm:pt-20"> {/* Adjusted pt for fixed header */}
         <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-1 space-y-6">
             <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -503,3 +527,4 @@ export default function HomePage() {
     </div>
   );
 }
+

@@ -31,7 +31,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline, Download, Settings2, ChevronDown, ExternalLink, Sun, Moon } from 'lucide-react';
+import { Loader2, Palette, Type, CaseUpper, ShieldCheck, Combine, Smile, Download, Settings2, ChevronDown, ExternalLink, Sun, Moon } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -62,15 +62,15 @@ const logoGenerationSchema = z.object({
 type LogoGenerationFormValues = z.infer<typeof logoGenerationSchema>;
 
 const designStyleOptions = [
-  { value: 'Minimalist', label: 'Minimalist', icon: <MinusSquare className="w-10 h-10 mb-2" />, hint: "minimalist logo" },
-  { value: 'Geometric', label: 'Geometric', icon: <BoxSelect className="w-10 h-10 mb-2" />, hint: "geometric logo" },
-  { value: 'Abstract', label: 'Abstract', icon: <Shapes className="w-10 h-10 mb-2" />, hint: "abstract art" },
-  { value: 'Vintage', label: 'Vintage', icon: <ScrollText className="w-10 h-10 mb-2" />, hint: "vintage emblem" },
-  { value: 'Modern', label: 'Modern', icon: <Rocket className="w-10 h-10 mb-2" />, hint: "modern icon" },
+  { value: 'Minimalist', label: 'Minimalist', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="minimalist logo" width={40} height={40} alt="Minimalist Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Geometric', label: 'Geometric', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="geometric logo" width={40} height={40} alt="Geometric Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Abstract', label: 'Abstract', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="abstract art" width={40} height={40} alt="Abstract Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Vintage', label: 'Vintage', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="vintage emblem" width={40} height={40} alt="Vintage Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Modern', label: 'Modern', icon: <Image src="https://placehold.co/600x400.png" data-ai-hint="modern icon" width={40} height={40} alt="Modern Design Style Preview" className="mb-2 rounded" /> },
 ] as const;
 
 const logoStyleOptions = [
-  { value: 'Icon-based', label: 'Icon-based', icon: <ImageIcon className="w-10 h-10 mb-2" /> },
+  { value: 'Icon-based', label: 'Icon-based', icon: <Image src="https://placehold.co/100x100.png" data-ai-hint="icon logo" width={40} height={40} alt="Icon-based style" className="mb-2 rounded" /> },
   { value: 'Wordmark', label: 'Wordmark', icon: <Type className="w-10 h-10 mb-2" /> },
   { value: 'Lettermark', label: 'Lettermark', icon: <CaseUpper className="w-10 h-10 mb-2" /> },
   { value: 'Emblem', label: 'Emblem', icon: <ShieldCheck className="w-10 h-10 mb-2" /> },
@@ -395,7 +395,7 @@ export default function HomePage() {
                                     className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                   >
                                     <div className="flex flex-col items-center text-center space-y-1">
-                                      {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
+                                      {option.icon}
                                       <span className="text-xs font-medium">{option.label}</span>
                                     </div>
                                   </Label>
@@ -430,7 +430,7 @@ export default function HomePage() {
                                     className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                   >
                                     <div className="flex flex-col items-center text-center space-y-1">
-                                      {React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
+                                      {React.isValidElement(option.icon) ? React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"}) : option.icon}
                                       <span className="text-xs font-medium">{option.label}</span>
                                     </div>
                                   </Label>

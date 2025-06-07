@@ -47,10 +47,18 @@ const resizeLogoFlow = ai.defineFlow(
     outputSchema: ResizeLogoOutputSchema,
   },
   async (input: ResizeLogoInput) => {
-    const resizePrompt = `Take the following logo image for the brand "${input.brandName}" and resize it to be exactly ${input.targetWidth} pixels wide and ${input.targetHeight} pixels tall.
-Maintain the original design's integrity and clarity as much as possible. Avoid any distortions or changes to the logo's core elements.
-If the original aspect ratio differs from the target ${input.targetWidth}x${input.targetHeight}, intelligently adapt the logo. Prefer scaling and then cropping if necessary to fill the dimensions, or add padding if cropping would harm the logo. The final image must be exactly ${input.targetWidth}x${input.targetHeight} pixels.
-Output the resized image as a ${input.targetFormat} file.`;
+    const resizePrompt = `You are an image processing bot. Your task is to resize the provided logo.
+The input logo is for the brand "${input.brandName}".
+**CRITICAL INSTRUCTION: The output image's dimensions MUST BE EXACTLY ${input.targetWidth} pixels wide AND ${input.targetHeight} pixels tall.**
+Do not deviate from these target dimensions under any circumstances.
+- If the original aspect ratio is different from the target ${input.targetWidth}x${input.targetHeight} aspect ratio:
+    - First, scale the logo to fit one dimension (width or height to be the larger of the two relative to the target, while maintaining original aspect ratio).
+    - Then, crop the logo from the center to meet the other dimension, ensuring the most important parts of the logo remain visible and centered.
+- Do NOT add any padding, letterboxing, or pillarboxing.
+- Do NOT distort or stretch the logo's original aspect ratio.
+- Maintain the highest possible visual quality and clarity of the original logo design.
+- Output the final resized image in ${input.targetFormat} format.
+The final image MUST be precisely ${input.targetWidth}x${input.targetHeight} pixels. This is the most important requirement.`;
 
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-exp',

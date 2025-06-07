@@ -31,7 +31,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Type, CaseUpper, ShieldCheck, Combine, Smile, Download, Settings2, ChevronDown, ExternalLink, Sun, Moon } from 'lucide-react';
+import { Loader2, Palette, Type, CaseUpper, ShieldCheck, Combine, Smile, Download, Settings2, ChevronDown, ExternalLink, Sun, Moon, Minimize2, Shapes, Brush, Landmark, Rocket } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -62,11 +62,11 @@ const logoGenerationSchema = z.object({
 type LogoGenerationFormValues = z.infer<typeof logoGenerationSchema>;
 
 const designStyleOptions = [
-  { value: 'Minimalist', label: 'Minimalist', icon: <Image src="https://images.unsplash.com/photo-1604965405469-ecdbe8936495?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWluaW1hbGlzdCUyMGljb258ZW58MHx8fHwxNzQ5Mjc2NTg2fDA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="minimalist icon" width={40} height={40} alt="Minimalist Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Geometric', label: 'Geometric', icon: <Image src="https://images.unsplash.com/photo-1564166307005-efca8b1ec87e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxnZW9tZXRyaWMlMjBzaGFwZXxlbnwwfHx8fDE3NDkyNzY1ODd8MA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="geometric shape" width={40} height={40} alt="Geometric Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Abstract', label: 'Abstract', icon: <Image src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhYnN0cmFjdCUyMGFydHxlbnwwfHx8fDE3NDkyNzY1ODZ8MA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="abstract art" width={40} height={40} alt="Abstract Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Vintage', label: 'Vintage', icon: <Image src="https://images.unsplash.com/photo-1605007236703-7377927e9a4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx2aW50YWdlJTIwYmFkZ2V8ZW58MHx8fHwxNzQ5Mjc2NTg2fDA&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="vintage badge" width={40} height={40} alt="Vintage Design Style Preview" className="mb-2 rounded" /> },
-  { value: 'Modern', label: 'Modern', icon: <Image src="https://images.unsplash.com/photo-1695106490532-5628ca08bebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9kZXJuJTIwc3ltYm9sfGVufDB8fHx8MTc0OTI3NjU4Nnww&ixlib=rb-4.1.0&q=80&w=1080" data-ai-hint="modern symbol" width={40} height={40} alt="Modern Design Style Preview" className="mb-2 rounded" /> },
+  { value: 'Minimalist', label: 'Minimalist', icon: <Minimize2 /> },
+  { value: 'Geometric', label: 'Geometric', icon: <Shapes /> },
+  { value: 'Abstract', label: 'Abstract', icon: <Brush /> },
+  { value: 'Vintage', label: 'Vintage', icon: <Landmark /> },
+  { value: 'Modern', label: 'Modern', icon: <Rocket /> },
 ] as const;
 
 const logoStyleOptions = [
@@ -395,7 +395,7 @@ export default function HomePage() {
                                     className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                   >
                                     <div className="flex flex-col items-center text-center space-y-1">
-                                      {option.icon}
+                                      {React.isValidElement(option.icon) && !(option.icon.type === Image) ? React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"}) : option.icon}
                                       <span className="text-xs font-medium">{option.label}</span>
                                     </div>
                                   </Label>

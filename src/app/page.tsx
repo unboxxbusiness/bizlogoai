@@ -31,7 +31,8 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline } from 'lucide-react';
+import { resizeLogo, type ResizeLogoInput } from '@/ai/flows/resize-logo-flow';
+import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline, Download, Settings2, ChevronDown } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -41,6 +42,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 
 const logoGenerationSchema = z.object({
   brandName: z.string().min(1, { message: 'Brand name is required.' }).max(50, { message: 'Brand name must be 50 characters or less.'}),
@@ -80,11 +90,21 @@ const fontStyleOptions = [
   { value: 'Playful', label: 'Playful' },
 ] as const;
 
+const resizeOptions = [
+  { label: 'YouTube Profile (800x800 px)', width: 800, height: 800, format: 'PNG', name: 'youtube_profile' },
+  { label: 'Instagram Profile (320x320 px)', width: 320, height: 320, format: 'PNG', name: 'instagram_profile' },
+  { label: 'Facebook Profile (180x180 px)', width: 180, height: 180, format: 'PNG', name: 'facebook_profile' },
+  { label: 'Website Header (250x100 px)', width: 250, height: 100, format: 'PNG', name: 'website_header' },
+  { label: 'Mobile Logo (120x60 px)', width: 120, height: 60, format: 'PNG', name: 'mobile_logo' },
+  { label: 'Favicon (32x32 px)', width: 32, height: 32, format: 'PNG', name: 'favicon' },
+] as const;
+
 
 export default function HomePage() {
   const { toast } = useToast();
   const [logoDataUri, setLogoDataUri] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isResizing, setIsResizing] = React.useState(false);
   const [formError, setFormError] = React.useState<string | null>(null);
   const [currentYear, setCurrentYear] = React.useState<number | null>(null);
 
@@ -135,11 +155,56 @@ export default function HomePage() {
     const link = document.createElement('a');
     link.href = logoDataUri;
     const fileExtension = logoDataUri.substring(logoDataUri.indexOf('/') + 1, logoDataUri.indexOf(';base64')) || 'png';
-    link.download = `${form.getValues('brandName') || 'logo'}.${fileExtension}`;
+    link.download = `${form.getValues('brandName') || 'logo'}_original.${fileExtension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+
+  const handleResizeAndDownload = async (option: typeof resizeOptions[0]) => {
+    if (!logoDataUri || !watchedBrandName) {
+      toast({
+        title: 'Error',
+        description: 'Please generate a logo first and ensure brand name is set.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setIsResizing(true);
+    try {
+      const result = await resizeLogo({
+        originalLogoDataUri: logoDataUri,
+        targetWidth: option.width,
+        targetHeight: option.height,
+        targetFormat: option.format,
+        brandName: watchedBrandName,
+      });
+
+      const link = document.createElement('a');
+      link.href = result.resizedLogoDataUri;
+      const fileExtension = result.resizedLogoDataUri.substring(result.resizedLogoDataUri.indexOf('/') + 1, result.resizedLogoDataUri.indexOf(';base64')) || 'png';
+      link.download = `${watchedBrandName}_${option.name}_${option.width}x${option.height}.${fileExtension}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast({
+        title: 'Logo Resized & Downloaded!',
+        description: `Resized logo (${option.label}) downloaded.`,
+      });
+    } catch (error) {
+      console.error(`Error resizing logo to ${option.width}x${option.height}:`, error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+      toast({
+        title: 'Resize Failed',
+        description: `Could not resize logo to ${option.label}. ${errorMessage}`,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsResizing(false);
+    }
+  };
+
 
   return (
     <div className="container mx-auto py-8 px-4 min-h-screen flex flex-col">
@@ -293,7 +358,7 @@ export default function HomePage() {
                     )}
                   />
 
-                  <Button type="submit" disabled={isLoading} className="w-full text-base sm:text-lg py-3 sm:py-4 transition-all duration-300 hover:opacity-90">
+                  <Button type="submit" disabled={isLoading || isResizing} className="w-full text-base sm:text-lg py-3 sm:py-4 transition-all duration-300 hover:opacity-90">
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -326,9 +391,30 @@ export default function HomePage() {
                 <div className="text-center animate-fade-in">
                   <Image src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
                   {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
-                  <Button onClick={handleDownload} className="mt-4 sm:mt-6 transition-all duration-300 hover:opacity-90">
-                    Download Logo
-                  </Button>
+                  <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
+                    <Button onClick={handleDownload} className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing}>
+                      <Download className="mr-2 h-4 w-4" /> Download Original
+                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing || !logoDataUri}>
+                          {isResizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Settings2 className="mr-2 h-4 w-4" />}
+                          Resize Logo
+                          <ChevronDown className="ml-2 h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuLabel>Select Size to Download</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {resizeOptions.map((option) => (
+                          <DropdownMenuItem key={option.name} onClick={() => handleResizeAndDownload(option)} disabled={isResizing}>
+                            {option.label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
                 </div>
               )}
               {!isLoading && !logoDataUri && (
@@ -355,4 +441,3 @@ export default function HomePage() {
     </div>
   );
 }
-

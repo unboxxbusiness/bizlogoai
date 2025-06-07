@@ -31,7 +31,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline, Download, Settings2, ChevronDown } from 'lucide-react';
+import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline, Download, Settings2, ChevronDown, ExternalLink } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -199,18 +199,39 @@ export default function HomePage() {
         const aspectRatio = originalWidth / originalHeight;
         const targetAspectRatio = targetWidth / targetHeight;
 
-        if (aspectRatio > targetAspectRatio) {
-          newWidth = targetWidth;
-          newHeight = targetWidth / aspectRatio;
-        } else {
+        if (aspectRatio > targetAspectRatio) { // original is wider than target
           newHeight = targetHeight;
-          newWidth = targetHeight * aspectRatio;
+          newWidth = newHeight * aspectRatio;
+        } else { // original is taller than target or same aspect ratio
+          newWidth = targetWidth;
+          newHeight = newWidth / aspectRatio;
         }
-
-        x = (targetWidth - newWidth) / 2;
-        y = (targetHeight - newHeight) / 2;
         
-        ctx.drawImage(img, x, y, newWidth, newHeight);
+        // If we are scaling up to fit, one dimension will match, other will be larger
+        // If we are scaling down to fit, one dimension will match, other will be smaller
+        // We want to "cover" the target area, then crop.
+        // So, scale such that the *smaller* scaled dimension is at least the target dimension
+        
+        let drawWidth, drawHeight, drawX, drawY;
+
+        if (originalWidth / originalHeight > targetWidth / targetHeight) {
+            // Original aspect ratio is wider than target aspect ratio
+            // Fit to height, then crop width
+            drawHeight = targetHeight;
+            drawWidth = originalWidth * (targetHeight / originalHeight);
+            drawX = (targetWidth - drawWidth) / 2;
+            drawY = 0;
+        } else {
+            // Original aspect ratio is taller than or equal to target aspect ratio
+            // Fit to width, then crop height
+            drawWidth = targetWidth;
+            drawHeight = originalHeight * (targetWidth / originalWidth);
+            drawX = 0;
+            drawY = (targetHeight - drawHeight) / 2;
+        }
+        
+        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+
 
         const resizedLogoDataUri = canvas.toDataURL(`image/${option.format.toLowerCase()}`);
         
@@ -252,10 +273,18 @@ export default function HomePage() {
 
 
   return (
-    <div className="container mx-auto py-8 px-4 min-h-screen flex flex-col">
-      <header className="text-center mb-10 sm:mb-12">
-        <h1 className="text-3xl sm:text-5xl font-headline font-bold text-primary">Bizlogo Ai</h1>
-        <p className="text-md sm:text-xl text-muted-foreground mt-2">Create your unique brand identity in seconds.</p>
+    <div className="container mx-auto px-4 min-h-screen flex flex-col">
+      <header className="flex flex-col sm:flex-row justify-between items-center py-6 mb-8 sm:mb-10">
+        <div className="text-center sm:text-left mb-4 sm:mb-0">
+          <h1 className="text-3xl sm:text-5xl font-headline font-bold text-primary">Bizlogo Ai</h1>
+          <p className="text-md sm:text-xl text-muted-foreground mt-1 sm:mt-2">Create your unique brand identity in seconds.</p>
+        </div>
+        <Button asChild variant="outline" className="w-full sm:w-auto">
+          <a href="https://www.learncodewithrk.in/" target="_blank" rel="noopener noreferrer">
+            More Tools
+            <ExternalLink className="ml-2 h-4 w-4" />
+          </a>
+        </Button>
       </header>
 
       <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -486,3 +515,4 @@ export default function HomePage() {
     </div>
   );
 }
+

@@ -281,7 +281,7 @@ export default function HomePage() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-background border-b shadow-sm">
         <div className="container mx-auto px-4">
           <header className="flex justify-between items-center py-3">
-            <h1 className="text-lg sm:text-xl font-headline font-bold text-primary">Bizlogo Ai</h1>
+            <h1 className="text-base sm:text-xl font-headline font-bold text-primary">Bizlogo Ai</h1>
             <div className="flex items-center">
               <Button variant="outline" size="icon" onClick={toggleTheme} className="mr-2" aria-label="Toggle theme">
                 {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

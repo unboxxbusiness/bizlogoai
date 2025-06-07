@@ -47,18 +47,33 @@ const resizeLogoFlow = ai.defineFlow(
     outputSchema: ResizeLogoOutputSchema,
   },
   async (input: ResizeLogoInput) => {
-    const resizePrompt = `You are an image processing bot. Your task is to resize the provided logo.
-The input logo is for the brand "${input.brandName}".
-**CRITICAL INSTRUCTION: The output image's dimensions MUST BE EXACTLY ${input.targetWidth} pixels wide AND ${input.targetHeight} pixels tall.**
-Do not deviate from these target dimensions under any circumstances.
-- If the original aspect ratio is different from the target ${input.targetWidth}x${input.targetHeight} aspect ratio:
-    - First, scale the logo to fit one dimension (width or height to be the larger of the two relative to the target, while maintaining original aspect ratio).
-    - Then, crop the logo from the center to meet the other dimension, ensuring the most important parts of the logo remain visible and centered.
-- Do NOT add any padding, letterboxing, or pillarboxing.
-- Do NOT distort or stretch the logo's original aspect ratio.
-- Maintain the highest possible visual quality and clarity of the original logo design.
-- Output the final resized image in ${input.targetFormat} format.
-The final image MUST be precisely ${input.targetWidth}x${input.targetHeight} pixels. This is the most important requirement.`;
+    // New, more forceful prompt
+    const resizePrompt = `TASK: Precise Image Resize.
+INPUT IMAGE: [Provided via media url input]
+BRAND CONTEXT: The logo is for a brand named "${input.brandName}". This context is for your understanding of the image's subject matter to make informed cropping decisions if necessary. Do not add the brand name as text to the image unless it's already part of the original logo.
+
+OUTPUT REQUIREMENTS:
+1.  **ABSOLUTE DIMENSIONS (CRITICAL & NON-NEGOTIABLE)**:
+    *   The final output image's width MUST BE EXACTLY ${input.targetWidth} pixels.
+    *   The final output image's height MUST BE EXACTLY ${input.targetHeight} pixels.
+    *   There is NO TOLERANCE for deviation from these dimensions. This is the MOST IMPORTANT instruction.
+
+2.  **ASPECT RATIO & CONTENT PRESERVATION**:
+    *   The primary goal is to fit the most important parts of the original logo within the new ${input.targetWidth}x${input.targetHeight} dimensions.
+    *   Maintain the original logo's aspect ratio during scaling. DO NOT STRETCH OR SQUASH the logo.
+    *   **Scaling Step**: Scale the original image (preserving its aspect ratio) so that it is large enough to cover the *entire* ${input.targetWidth}x${input.targetHeight} target area. One dimension of the scaled logo will match the target, and the other will be equal or larger.
+    *   **Cropping Step**: After scaling, crop the image from the center outwards to precisely ${input.targetWidth}x${input.targetHeight} pixels. Ensure the most visually significant elements of the logo remain centered and as complete as possible.
+
+3.  **NO PADDING/BACKGROUND FILLING**:
+    *   DO NOT add any padding, letterboxing, pillarboxing, or background color fills to achieve the target dimensions. The original logo content (after scaling and cropping) must fill the entire ${input.targetWidth}x${input.targetHeight} frame.
+
+4.  **VISUAL QUALITY**:
+    *   Maintain the highest possible visual quality, sharpness, and clarity of the original logo throughout the process.
+
+5.  **OUTPUT FORMAT**:
+    *   Render the final image in ${input.targetFormat} format.
+
+**REITERATION OF CRITICAL FAILURE CONDITION**: If the output image is NOT EXACTLY ${input.targetWidth}x${input.targetHeight} pixels, the task is considered a COMPLETE FAILURE. Verify dimensions before outputting.`;
 
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-exp',
@@ -81,4 +96,3 @@ The final image MUST be precisely ${input.targetWidth}x${input.targetHeight} pix
     };
   }
 );
-

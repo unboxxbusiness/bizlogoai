@@ -53,7 +53,9 @@ const generateLogoFlow = ai.defineFlow(
 - Design Style: ${input.designStyle}
 - Logo Style: ${input.logoStyle}
 - Font Style: ${input.fontStyle}
-The logo should be visually appealing and suitable for a business. If the logo style is Wordmark or Lettermark, ensure the brand name is prominent and uses the specified font style. For Icon-based, Emblem, Combination Mark, or Mascot logos, if text is part of the design, it should also reflect the chosen font style.`;
+The logo should be visually appealing and suitable for a business.
+The logo must be 800x800 pixels.
+If the logo style is Wordmark or Lettermark, ensure the brand name is prominent and uses the specified font style. For Icon-based, Emblem, Combination Mark, or Mascot logos, if text is part of the design, it should also reflect the chosen font style.`;
 
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-exp',

@@ -86,6 +86,11 @@ export default function HomePage() {
   const [logoDataUri, setLogoDataUri] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [formError, setFormError] = React.useState<string | null>(null);
+  const [currentYear, setCurrentYear] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   const form = useForm<LogoGenerationFormValues>({
     resolver: zodResolver(logoGenerationSchema),
@@ -339,8 +344,11 @@ export default function HomePage() {
         </div>
       </main>
       <footer className="text-center py-8 mt-12 border-t">
-        <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Bizlogo Ai. All rights reserved.</p>
+        <p className="text-sm text-muted-foreground">
+          {currentYear !== null ? `© ${currentYear} Bizlogo Ai. All rights reserved.` : 'Loading year...'}
+        </p>
       </footer>
     </div>
   );
 }
+

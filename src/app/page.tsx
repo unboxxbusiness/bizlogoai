@@ -31,7 +31,6 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { generateLogo, type LogoGenerationInput } from '@/ai/flows/logo-generation';
-import { resizeLogo, type ResizeLogoInput } from '@/ai/flows/resize-logo-flow';
 import { Loader2, Palette, Image as ImageIcon, Type, CaseUpper, ShieldCheck, MinusSquare, BoxSelect, Shapes, ScrollText, Rocket, Combine, Smile, Baseline, Download, Settings2, ChevronDown } from 'lucide-react';
 import {
   Form,
@@ -171,27 +170,74 @@ export default function HomePage() {
       return;
     }
     setIsResizing(true);
+
     try {
-      const result = await resizeLogo({
-        originalLogoDataUri: logoDataUri,
-        targetWidth: option.width,
-        targetHeight: option.height,
-        targetFormat: option.format,
-        brandName: watchedBrandName,
-      });
+      const img = document.createElement('img');
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = option.width;
+        canvas.height = option.height;
+        const ctx = canvas.getContext('2d');
 
-      const link = document.createElement('a');
-      link.href = result.resizedLogoDataUri;
-      const fileExtension = result.resizedLogoDataUri.substring(result.resizedLogoDataUri.indexOf('/') + 1, result.resizedLogoDataUri.indexOf(';base64')) || 'png';
-      link.download = `${watchedBrandName}_${option.name}_${option.width}x${option.height}.${fileExtension}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        if (!ctx) {
+          toast({
+            title: 'Resize Failed',
+            description: 'Could not process image (canvas context error).',
+            variant: 'destructive',
+          });
+          setIsResizing(false);
+          return;
+        }
 
-      toast({
-        title: 'Logo Resized & Downloaded!',
-        description: `Resized logo (${option.label}) downloaded.`,
-      });
+        const originalWidth = img.naturalWidth;
+        const originalHeight = img.naturalHeight;
+        const targetWidth = option.width;
+        const targetHeight = option.height;
+
+        let newWidth, newHeight, x, y;
+
+        const aspectRatio = originalWidth / originalHeight;
+        const targetAspectRatio = targetWidth / targetHeight;
+
+        if (aspectRatio > targetAspectRatio) {
+          newWidth = targetWidth;
+          newHeight = targetWidth / aspectRatio;
+        } else {
+          newHeight = targetHeight;
+          newWidth = targetHeight * aspectRatio;
+        }
+
+        x = (targetWidth - newWidth) / 2;
+        y = (targetHeight - newHeight) / 2;
+        
+        ctx.drawImage(img, x, y, newWidth, newHeight);
+
+        const resizedLogoDataUri = canvas.toDataURL(`image/${option.format.toLowerCase()}`);
+        
+        const link = document.createElement('a');
+        link.href = resizedLogoDataUri;
+        const fileExtension = option.format.toLowerCase();
+        link.download = `${watchedBrandName}_${option.name}_${option.width}x${option.height}.${fileExtension}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        toast({
+          title: 'Logo Resized & Downloaded!',
+          description: `Resized logo (${option.label}) downloaded.`,
+        });
+        setIsResizing(false);
+      };
+      img.onerror = () => {
+        toast({
+          title: 'Resize Failed',
+          description: 'Could not load the original logo for resizing.',
+          variant: 'destructive',
+        });
+        setIsResizing(false);
+      };
+      img.src = logoDataUri;
+
     } catch (error) {
       console.error(`Error resizing logo to ${option.width}x${option.height}:`, error);
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
@@ -200,7 +246,6 @@ export default function HomePage() {
         description: `Could not resize logo to ${option.label}. ${errorMessage}`,
         variant: 'destructive',
       });
-    } finally {
       setIsResizing(false);
     }
   };

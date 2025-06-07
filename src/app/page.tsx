@@ -147,7 +147,7 @@ export default function HomePage() {
 
   const watchedBrandName = form.watch('brandName');
 
-  async function onSubmit(data: LogoGenerationFormValues) {
+  async function onSubmit(data: LogoGenerationInput) {
     setIsLoading(true);
     setLogoDataUri(null);
     setFormError(null);
@@ -281,7 +281,7 @@ export default function HomePage() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-background border-b shadow-sm">
         <div className="container mx-auto px-4">
           <header className="flex justify-between items-center py-3">
-            <h1 className="text-xl sm:text-2xl font-headline font-bold text-primary">Bizlogo Ai</h1>
+            <h1 className="text-lg sm:text-xl font-headline font-bold text-primary">Bizlogo Ai</h1>
             <div className="flex items-center">
               <Button variant="outline" size="icon" onClick={toggleTheme} className="mr-2" aria-label="Toggle theme">
                 {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -460,7 +460,7 @@ export default function HomePage() {
             </Card>
           </div>
 
-          <div className="lg:col-span-2 lg:sticky lg:top-8">
+          <div className="lg:col-span-2 lg:sticky lg:top-20"> {/* Adjusted lg:top-X to account for fixed header height */}
             <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
               <CardHeader>
                 <CardTitle className="font-headline text-2xl sm:text-3xl">Logo Preview</CardTitle>

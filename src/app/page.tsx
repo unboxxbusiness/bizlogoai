@@ -203,7 +203,7 @@ export default function HomePage() {
                                   className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                 >
                                   <div className="flex flex-col items-center text-center space-y-1">
-                                    <Image src={`https://placehold.co/60x60.png`} data-ai-hint={option.hint} alt={option.label} width={60} height={60} className="mb-1 rounded-sm"/>
+                                    {React.cloneElement(option.icon, { className: "w-10 h-10 mb-1 text-primary"})}
                                     <span className="text-xs font-medium">{option.label}</span>
                                   </div>
                                 </Label>
@@ -306,5 +306,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    

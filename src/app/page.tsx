@@ -297,7 +297,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 flex-grow flex flex-col pt-16 sm:pt-20">
+      <div className="container mx-auto px-4 flex-grow flex flex-col pt-20 sm:pt-20"> {/* Adjusted pt for fixed header */}
         <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-1 space-y-6">
             <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -460,7 +460,7 @@ export default function HomePage() {
             </Card>
           </div>
 
-          <div className="lg:col-span-2 lg:sticky lg:top-20">
+          <div className="lg:col-span-2 lg:sticky lg:top-20"> {/* Adjusted lg:top for fixed header */}
             <Card className="shadow-lg transition-all duration-300 hover:shadow-xl">
               <CardHeader>
                 <CardTitle className="font-headline text-2xl sm:text-3xl">Logo Preview</CardTitle>
@@ -476,6 +476,12 @@ export default function HomePage() {
                   <div className="text-center animate-fade-in">
                     <NextImage src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
                     {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Color Palette: <span className="font-medium text-foreground">{form.getValues('colorPalette')}</span>
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Font Style: <span className="font-medium text-foreground">{form.getValues('fontStyle')}</span>
+                    </p>
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
                       <Button onClick={handleDownload} className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing}>
                         <Download className="mr-2 h-4 w-4" /> Download Original

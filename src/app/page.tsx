@@ -89,6 +89,18 @@ const fontStyleOptions = [
   { value: 'Playful', label: 'Playful' },
 ] as const;
 
+const colorPaletteDetails: Record<LogoGenerationFormValues['colorPalette'], string> = {
+  'vibrant': "Vibrant (e.g., #fca311, #ff6b6b, #4ecdc4)",
+  'pastel': "Pastel (e.g., #ffd1dc, #a0c4ff, #b2f2bb)",
+  'dark mode': "Dark Mode (e.g., #14213d Background, #e5e5e5 Text)",
+  'monochrome': "Monochrome (e.g., #000000, #808080, #ffffff)",
+  'Earthy Tones': "Earthy Tones (e.g., #8B4513, #A0522D, #D2B48C)",
+  'Oceanic Blues': "Oceanic Blues (e.g., #0077BE, #00AEEF, #7AC5CD)",
+  'Sunset Hues': "Sunset Hues (e.g., #FF4500, #FF8C00, #FFD700)",
+  'Forest Greens': "Forest Greens (e.g., #228B22, #006400, #90EE90)",
+};
+
+
 const resizeOptions = [
   { label: 'YouTube Profile (800x800 px)', width: 800, height: 800, format: 'PNG', name: 'youtube_profile' },
   { label: 'Instagram Profile (320x320 px)', width: 320, height: 320, format: 'PNG', name: 'instagram_profile' },
@@ -335,14 +347,9 @@ export default function HomePage() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="vibrant">Vibrant</SelectItem>
-                              <SelectItem value="pastel">Pastel</SelectItem>
-                              <SelectItem value="dark mode">Dark Mode</SelectItem>
-                              <SelectItem value="monochrome">Monochrome</SelectItem>
-                              <SelectItem value="Earthy Tones">Earthy Tones</SelectItem>
-                              <SelectItem value="Oceanic Blues">Oceanic Blues</SelectItem>
-                              <SelectItem value="Sunset Hues">Sunset Hues</SelectItem>
-                              <SelectItem value="Forest Greens">Forest Greens</SelectItem>
+                              {Object.entries(colorPaletteDetails).map(([value, label]) => (
+                                <SelectItem key={value} value={value}>{label.split(' (')[0]}</SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -395,7 +402,7 @@ export default function HomePage() {
                                     className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                   >
                                     <div className="flex flex-col items-center text-center space-y-1">
-                                      {React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
+                                      {React.isValidElement(option.icon) ? React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"}) : option.icon}
                                       <span className="text-xs font-medium">{option.label}</span>
                                     </div>
                                   </Label>
@@ -430,7 +437,7 @@ export default function HomePage() {
                                     className={`cursor-pointer w-full rounded-md border-2 border-muted bg-popover p-2 sm:p-3 hover:border-accent transition-all duration-300 ${field.value === option.value ? 'border-primary ring-2 ring-primary' : ''}`}
                                   >
                                     <div className="flex flex-col items-center text-center space-y-1">
-                                    {React.cloneElement(option.icon as React.ReactElement<any>, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"})}
+                                    {React.isValidElement(option.icon) ? React.cloneElement(option.icon, { className: "w-6 h-6 sm:w-8 sm:h-8 mb-1 text-primary"}) : option.icon}
                                       <span className="text-xs font-medium">{option.label}</span>
                                     </div>
                                   </Label>
@@ -476,12 +483,14 @@ export default function HomePage() {
                   <div className="text-center animate-fade-in">
                     <NextImage src={logoDataUri} alt="Generated Logo" width={250} height={250} className="max-w-full max-h-[150px] sm:max-h-[180px] lg:max-h-[200px] object-contain mb-4 rounded-md shadow-md" />
                     {watchedBrandName && <p className="text-xl sm:text-2xl font-headline mt-2 text-foreground">{watchedBrandName}</p>}
+                    
                     <p className="text-sm text-muted-foreground mt-2">
-                      Color Palette: <span className="font-medium text-foreground">{form.getValues('colorPalette')}</span>
+                      Color Palette: <span className="font-medium text-foreground">{colorPaletteDetails[form.getValues('colorPalette')]}</span>
                     </p>
                     <p className="text-sm text-muted-foreground">
                       Font Style: <span className="font-medium text-foreground">{form.getValues('fontStyle')}</span>
                     </p>
+
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
                       <Button onClick={handleDownload} className="transition-all duration-300 hover:opacity-90 w-full sm:w-auto" disabled={isResizing}>
                         <Download className="mr-2 h-4 w-4" /> Download Original

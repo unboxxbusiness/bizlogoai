@@ -33,6 +33,7 @@ const LogoGenerationOutputSchema = z.object({
       'The generated logo as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
     ),
   prompt: z.string().describe('The prompt that was used to generate the logo.'),
+  suggestedFontName: z.string().describe('A common, real-world font name suggestion that aligns with the chosen font style (e.g., Roboto for Sans-serif, Times New Roman for Serif).'),
 });
 
 export type LogoGenerationOutput = z.infer<typeof LogoGenerationOutputSchema>;
@@ -69,9 +70,44 @@ If the logo style is Wordmark or Lettermark, ensure the brand name is prominent 
       throw new Error('Image generation failed to return a media URL.');
     }
 
+    // New: Call a text model to suggest a font name
+    const fontSuggestionPrompt = `Given the following logo design choices for a brand named "${input.brandName}":
+- Color Palette: ${input.colorPalette}
+- Design Style: ${input.designStyle}
+- Logo Style: ${input.logoStyle}
+- Font Style: ${input.fontStyle}
+
+Based *specifically* on the Font Style category "${input.fontStyle}", suggest one or two common, easily available (e.g., on Google Fonts) real-world font names that a designer might typically use for this style.
+For example:
+- If Font Style is 'Sans-serif', suggest 'Roboto' or 'Open Sans'.
+- If Font Style is 'Serif', suggest 'Merriweather' or 'Playfair Display'.
+- If Font Style is 'Script', suggest 'Pacifico' or 'Lobster'.
+- If Font Style is 'Display', suggest 'Bebas Neue' or 'Anton'.
+- If Font Style is 'Modern', suggest 'Montserrat' or 'Raleway'.
+- If Font Style is 'Futuristic', suggest 'Orbitron' or 'Audiowide'.
+- If Font Style is 'Elegant', suggest 'Great Vibes' or 'Cinzel'.
+- If Font Style is 'Playful', suggest 'Comic Sans MS' (if appropriate for playfulness) or 'Fredoka One'.
+
+Respond with only the font name(s) as a short string, like "Roboto, Open Sans" or "Lobster". Do not add any other explanatory text.`;
+
+    let suggestedFontName = "N/A";
+    try {
+      const fontSuggestionResponse = await ai.generate({
+        prompt: fontSuggestionPrompt,
+        // This will use the default model configured in src/ai/genkit.ts (e.g., gemini-2.0-flash for text)
+      });
+      const textResponse = fontSuggestionResponse.text?.trim();
+      if (textResponse) {
+        suggestedFontName = textResponse;
+      }
+    } catch (fontError) {
+      console.warn("Could not get font suggestion:", fontError instanceof Error ? fontError.message : fontError);
+    }
+
     return {
       logoDataUri: media.url,
       prompt: imagePrompt,
+      suggestedFontName: suggestedFontName,
     };
   }
 );
